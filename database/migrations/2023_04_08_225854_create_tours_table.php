@@ -13,8 +13,14 @@ return new class extends Migration
     {
         Schema::create('tours', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('lugare_id')->nullable()->constrained('lugares');
             $table->string('titulo');
-            $table->string('lugares');
+            $table->text('descripcion_spanish');
+            $table->text('descripcion_english');
+            $table->text('incluye_spanish');
+            $table->text('incluye_english');
+            $table->string('duracion');
+            $table->string('img');
             $table->timestamps();
         });
     }

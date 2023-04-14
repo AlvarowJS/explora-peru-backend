@@ -47,9 +47,9 @@ class AuthController extends Controller
         ]);
 
         // Generar un token de acceso para el conductor.
-        $token = $driver->createToken('driver_token')->plainTextToken;
+        // $token = $driver->createToken('driver_token')->plainTextToken;
 
-        return response()->json(['token' => $token], 201);
+        // return response()->json(['token' => $token], 201);
     }
 
 }
