@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('duracion');
             $table->string('img');
             $table->timestamps();
+
         });
     }
 

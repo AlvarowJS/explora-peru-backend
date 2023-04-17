@@ -18,15 +18,15 @@ class TourController extends Controller
 
     public function store(Request $request)
     {
-   
         $tour = new Tour();
+        $tour->lugare_id = $request->input('lugare_id');
         $tour->titulo = $request->input('titulo');
         $tour->descripcion_spanish = $request->input('descripcion_spanish');
         $tour->descripcion_english = $request->input('descripcion_english');
         $tour->incluye_spanish = $request->input('incluye_spanish');
         $tour->incluye_english = $request->input('incluye_english');
         $tour->duracion = $request->input('duracion');
-        $tour->lugare_id = $request->input('lugare_id');
+
 
         if ($request->hasFile('img')) {
             $file = $request->file('img');
@@ -34,10 +34,12 @@ class TourController extends Controller
             $path = $file->storeAs('public/tours', $fileName);
             $tour->img = $fileName;
         }
-
+        else{
+            return response()->json("la imagen es muy pesada");
+        }
         $tour->save();
         return response()->json($tour);
-        
+
     }
 
     public function show($id)
