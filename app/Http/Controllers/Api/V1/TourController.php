@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Tour;
+
 class TourController extends Controller
 {
     public function index()
@@ -18,27 +19,37 @@ class TourController extends Controller
 
     public function store(Request $request)
     {
-        $tour = new Tour();
-        $tour->lugare_id = $request->input('lugare_id');
-        $tour->titulo = $request->input('titulo');
-        $tour->descripcion_spanish = $request->input('descripcion_spanish');
-        $tour->descripcion_english = $request->input('descripcion_english');
-        $tour->incluye_spanish = $request->input('incluye_spanish');
-        $tour->incluye_english = $request->input('incluye_english');
-        $tour->duracion = $request->input('duracion');
+        $carpeta = "tours";
+        $ruta = public_path($carpeta);
 
-
+        if (!\File::isDirectory($ruta)) {
+            $publicPath = 'storage/' . $carpeta;
+            \File::makeDirectory($publicPath, 0777, true, true);
+        }
+        $files = $request->file('img');
         if ($request->hasFile('img')) {
-            $file = $request->file('img');
-            $fileName = uniqid() . '.' .$file->getClientOriginalName();
-            $path = $file->storeAs('public/tours', $fileName);
-            $tour->img = $fileName;
+
+            // foreach ($files as $file) {
+            $nombre = uniqid() . '.' . $files->getClientOriginalName();
+            $path = $carpeta . '/' . $nombre;
+            \Storage::disk('public')->put($path, \File::get($files));
+            // }
+            $tour = new Tour([
+                'lugare_id' => $request->lugare_id,
+                'titulo' => $request->titulo,
+                'descripcion_spanish' => $request->descripcion_spanish,
+                'descripcion_english' => $request->descripcion_english,
+                'incluye_spanish' => $request->incluye_spanish,
+                'incluye_english' => $request->incluye_english,
+                'duracion' => $request->duracion,
+                'img' => $nombre
+            ]);
+            $tour->save();
+            return "archivo guardado";
+
+        } else {
+            return "erro";
         }
-        else{
-            return response()->json("la imagen es muy pesada");
-        }
-        $tour->save();
-        return response()->json($tour);
 
     }
 
@@ -48,11 +59,51 @@ class TourController extends Controller
         return response()->json($tour);
     }
 
-    public function update(Request $request, $id)
+    public function updateTour(Request $request)
     {
-        $tour = Tour::find($id);
-        $tour->update($request->all());
-        return response()->json($tour, 200);
+
+        $carpeta = "tours";
+        $ruta = public_path($carpeta);
+
+        if (!\File::isDirectory($ruta)) {
+            $publicPath = 'storage/' . $carpeta;
+            \File::makeDirectory($publicPath, 0777, true, true);
+        }
+        $files = $request->file('img');
+        if ($request->hasFile('img')) {
+            return "hola";
+            // foreach ($files as $file) {
+            $nombre = uniqid() . '.' . $files->getClientOriginalName();
+            $path = $carpeta . '/' . $nombre;
+            \Storage::disk('public')->put($path, \File::get($files));
+            // }
+
+            $tour = Tour::find($id);
+            $tour->update([
+                'lugare_id' => $request->lugare_id,
+                'titulo' => $request->titulo,
+                'descripcion_spanish' => $request->descripcion_spanish,
+                'descripcion_english' => $request->descripcion_english,
+                'incluye_spanish' => $request->incluye_spanish,
+                'incluye_english' => $request->incluye_english,
+                'duracion' => $request->duracion,
+                'img' => $nombre
+            ]);
+            return response()->json([$tour], 200);
+
+        } else {
+            return "erro";
+        }
+        // $tour = Tour::find($id);
+        // if ($request->hasFile('img')) {
+        //     $file = $request->file('img');
+        //     $fileName = uniqid() . '.' . $file->getClientOriginalName();
+        //     $path = $file->storeAs('public/tours', $fileName);
+        //     $tour->img = $fileName;
+        // }
+        // $tour->update($request->all());
+        // return response()->json($tour, 200);
+
     }
 
     public function destroy($id)

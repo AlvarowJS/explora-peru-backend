@@ -27,3 +27,6 @@ Route::apiResource('/v1/noticias', Noticia::class);
 Route::apiResource('/v1/tours', Tour::class);
 Route::apiResource('/v1/libros', Libro::class);
 Route::apiResource('/v1/contactenos', Contacteno::class);
+
+Route::put('/v1/tour-update/{id}', [Tour::class, 'updateTour']);
+
