@@ -17,6 +17,7 @@ return new class extends Migration
             $table->char('ruc',11);
             $table->char('telefono', 9);
             $table->string('direccion');
+            $table->string('active')->default(false);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

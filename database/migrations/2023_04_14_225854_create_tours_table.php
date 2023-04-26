@@ -19,8 +19,11 @@ return new class extends Migration
             $table->text('descripcion_english');
             $table->text('incluye_spanish');
             $table->text('incluye_english');
+            $table->text('no_incluye_spanish');
+            $table->text('no_incluye_english');
             $table->string('duracion');
             $table->string('img');
+            $table->string('archivo')->nullable();
             $table->timestamps();
 
         });

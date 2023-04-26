@@ -15,10 +15,13 @@ class Tour extends Model
         'descripcion_english',
         'incluye_spanish',
         'incluye_english',
+        'no_incluye_spanish',
+        'no_incluye_english',
         'lugares',
         'duracion',
         'img',
-        'lugare_id',
+        'archivo',
+        'lugare_id'
     ];
 
     public function lugare()

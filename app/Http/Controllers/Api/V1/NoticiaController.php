@@ -23,19 +23,48 @@ class NoticiaController extends Controller
      */
     public function store(Request $request)
     {
-        $noticia = new Noticia();
-        $noticia->titulo = $request->input('titulo');
-        $noticia->nota = $request->input('nota');
 
-        if ($request->hasFile('img')) {
-            $file = $request->file('img');
-            $fileName = uniqid() . '.' .$file->getClientOriginalName();
-            $path = $file->storeAs('public/noticias', $fileName);
-            $noticia->img = $fileName;
+        $carpeta = "noticias";
+        $ruta = public_path($carpeta);
+
+        if (!\File::isDirectory($ruta)) {
+            $publicPath = 'storage/' . $carpeta;
+            \File::makeDirectory($publicPath, 0777, true, true);
+        }
+        $files = $request->file('img');
+        if ($request->hasFile('img') || $request->hasFile('archivo')) {
+
+            $nombre = uniqid() . '.' . $files->getClientOriginalName();
+            $path = $carpeta . '/' . $nombre;
+            \Storage::disk('public')->put($path, \File::get($files));
+
+            $noticia = new Noticia([
+                'titulo' => $request->titulo,
+                'nota' => $request->nota,
+                'img' => $nombre,
+
+            ]);
+            $noticia->save();
+            return "archivo guardado";
+
+        } else {
+            return "erro";
         }
 
-        $noticia->save();
-        return response()->json($noticia);
+       ///////
+        // $noticia = new Noticia();
+        // $noticia->titulo = $request->input('titulo');
+        // $noticia->nota = $request->input('nota');
+
+        // if ($request->hasFile('img')) {
+        //     $file = $request->file('img');
+        //     $fileName = uniqid() . '.' .$file->getClientOriginalName();
+        //     $path = $file->storeAs('public/noticias', $fileName);
+        //     $noticia->img = $fileName;
+        // }
+
+        // $noticia->save();
+        // return response()->json($noticia);
     }
 
     /**

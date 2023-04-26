@@ -27,12 +27,17 @@ class TourController extends Controller
             \File::makeDirectory($publicPath, 0777, true, true);
         }
         $files = $request->file('img');
-        if ($request->hasFile('img')) {
+        $filesPDF = $request->file('archivo');
+        if ($request->hasFile('img') || $request->hasFile('archivo')) {
 
             // foreach ($files as $file) {
             $nombre = uniqid() . '.' . $files->getClientOriginalName();
             $path = $carpeta . '/' . $nombre;
             \Storage::disk('public')->put($path, \File::get($files));
+
+            $nombrePDF = uniqid() . '.' . $filesPDF->getClientOriginalName();
+            $pathPDF = $carpeta . '/' . $nombrePDF;
+            \Storage::disk('public')->put($pathPDF, \File::get($filesPDF));
             // }
             $tour = new Tour([
                 'lugare_id' => $request->lugare_id,
@@ -41,8 +46,12 @@ class TourController extends Controller
                 'descripcion_english' => $request->descripcion_english,
                 'incluye_spanish' => $request->incluye_spanish,
                 'incluye_english' => $request->incluye_english,
+                'no_incluye_spanish' => $request->no_incluye_spanish,
+                'no_incluye_english' => $request->no_incluye_english,
                 'duracion' => $request->duracion,
-                'img' => $nombre
+                'img' => $nombre,
+                'archivo' => $nombrePDF
+
             ]);
             $tour->save();
             return "archivo guardado";
@@ -86,6 +95,8 @@ class TourController extends Controller
                 'descripcion_english' => $request->descripcion_english,
                 'incluye_spanish' => $request->incluye_spanish,
                 'incluye_english' => $request->incluye_english,
+                'no_incluye_spanish' => $request->no_incluye_spanish,
+                'no_incluye_english' => $request->no_incluye_english,
                 'duracion' => $request->duracion,
                 'img' => $nombre
             ]);
