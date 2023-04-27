@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\NoticiaController as Noticia;
 use App\Http\Controllers\Api\V1\TourController as Tour;
 use App\Http\Controllers\Api\V1\LibroController as Libro;
 use App\Http\Controllers\Api\V1\ContactenoController as Contacteno;
+use App\Http\Controllers\Api\AuthController as Auth;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,6 +22,13 @@ use App\Http\Controllers\Api\V1\ContactenoController as Contacteno;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('/login', [Auth::class, 'login']);
+Route::post('/register', [Auth::class, 'register']);
+Route::put('/active-user/{id}', [Auth::class, 'activeUser']);
+Route::put('/desactivate-user/{id}', [Auth::class, 'desactivateUser']);
+Route::get('/all-users', [Auth::class, 'listarUsuarios']);
+Route::delete('/delete-users/{id}', [Auth::class, 'deleteUsuario']);
+
 
 Route::apiResource('/v1/lugares', Lugare::class);
 Route::apiResource('/v1/noticias', Noticia::class);
