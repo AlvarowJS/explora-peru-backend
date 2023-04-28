@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\TourController as Tour;
 use App\Http\Controllers\Api\V1\LibroController as Libro;
 use App\Http\Controllers\Api\V1\ContactenoController as Contacteno;
 use App\Http\Controllers\Api\AuthController as Auth;
+use App\Http\Controllers\Api\V1\TarifaController as Tarifa;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,6 +23,7 @@ use App\Http\Controllers\Api\AuthController as Auth;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+// Usuario
 Route::post('/login', [Auth::class, 'login']);
 Route::post('/register', [Auth::class, 'register']);
 Route::put('/active-user/{id}', [Auth::class, 'activeUser']);
@@ -29,6 +31,14 @@ Route::put('/desactivate-user/{id}', [Auth::class, 'desactivateUser']);
 Route::get('/all-users', [Auth::class, 'listarUsuarios']);
 Route::delete('/delete-users/{id}', [Auth::class, 'deleteUsuario']);
 
+// Tarifas
+Route::apiResource('/v1/tarifa', Tarifa::class);
+Route::get('/v1/tarifa-user/{id}', [Tarifa::class, 'listarTarifa']);
+
+// Route::get('/v1/tarifa', [Tarifa::class, 'index']);
+// Route::get('/v1/tarifa/{id}', [Tarifa::class, 'show']);
+// Route::put('/v1/tarifa/{id}', [Tarifa::class, 'update']);
+// Route::post('/v1/tarifa', [Tarifa::class, 'store']);
 
 Route::apiResource('/v1/lugares', Lugare::class);
 Route::apiResource('/v1/noticias', Noticia::class);

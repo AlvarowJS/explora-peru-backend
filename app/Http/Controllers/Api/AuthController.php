@@ -64,12 +64,14 @@ class AuthController extends Controller
             $user = Auth::user();
             $token = $user->createToken('MyApp')->plainTextToken;
             $role = $user->role;
+            $id_user = $user->id;
             $razon_social = $user->razon_social;
             $ruc = $user->ruc;
 
             return response()->json([
                 'token' => $token,
                 'role' => $role,
+                'id_user' => $id_user,
                 'razon_social' => $razon_social,
                 'ruc' => $ruc,
             ]);

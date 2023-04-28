@@ -68,7 +68,7 @@ class TourController extends Controller
         return response()->json($tour);
     }
 
-    public function updateTour(Request $request)
+    public function updateTour(Request $request, $id)
     {
 
         $carpeta = "tours";

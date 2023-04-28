@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('tarifas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('users_id')->nullable()->constrained('users');
+            $table->string('nombre_tarifa');
+            $table->string('archivo');            
             $table->timestamps();
         });
     }
