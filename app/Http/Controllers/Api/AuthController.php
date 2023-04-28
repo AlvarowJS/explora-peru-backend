@@ -39,7 +39,12 @@ class AuthController extends Controller
     }
     public function listarUsuarios()
     {
-        $users = User::with('role')->get();
+        // $users = User::with('role')->get();
+        $users = User::with('role')
+        ->whereHas('role', function($query) {
+            $query->where('id', 2);
+        })
+        ->get();
 
         return response()->json($users);
     }
@@ -52,18 +57,21 @@ class AuthController extends Controller
     }
     public function login(Request $request)
     {
-        $credentials = $request->only('razon_social', 'password');
-
-        if (Auth::attempt($credentials)) {
+        $credentials = $request->only('ruc', 'password');
+        
+        if (Auth::attempt($credentials) && Auth::user()->active) {
+            
             $user = Auth::user();
             $token = $user->createToken('MyApp')->plainTextToken;
             $role = $user->role;
             $razon_social = $user->razon_social;
+            $ruc = $user->ruc;
 
             return response()->json([
                 'token' => $token,
                 'role' => $role,
                 'razon_social' => $razon_social,
+                'ruc' => $ruc,
             ]);
         } else {
             return response()->json(['error' => 'Credenciales inválidas'], 401);

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('razon_social');
-            $table->char('ruc',11);
+            $table->char('ruc',11)->unique();
             $table->char('telefono', 9);
             $table->string('direccion');
             $table->boolean('active')->default(false);
