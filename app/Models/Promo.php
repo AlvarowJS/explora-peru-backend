@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Lugare;
 
-class Tour extends Model
+class Promo extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -23,9 +22,4 @@ class Tour extends Model
         'archivo_english',
         'archivo_spanish'
     ];
-
-    public function lugare()
-    {
-        return $this->belongsTo(Lugare::class);
-    }
 }

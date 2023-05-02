@@ -11,15 +11,15 @@ class TarifaController extends Controller
     public function listarTarifa($id)
     {
         // return "hola";
-        $tarifa = Tarifa::with('user')->where('users_id', $id)->get();
-        return response()->json($tarifa); 
+        $tarifa = Tarifa::with('user')->where('user_id', $id)->get();
+        return response()->json($tarifa);
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        
+
         $tarifa = Tarifa::with('user')->get();
         return response()->json($tarifa);
     }
@@ -44,10 +44,11 @@ class TarifaController extends Controller
 
             $tarifa = new Tarifa([
                 'nombre_tarifa' => $request->nombre_tarifa,
-                'users_id' => $request->users_id,
+                'user_id' => $request->user_id,
                 'archivo' => $nombre,
             ]);
             $tarifa->save();
+            return response()->json($tarifa);
         } else {
             return "error";
         }
@@ -59,7 +60,7 @@ class TarifaController extends Controller
     public function show($id)
     {
         $tarifa = Tarifa::find($id);
-        
+
         return response()->json($tarifa);
     }
 
@@ -75,11 +76,11 @@ class TarifaController extends Controller
             $publicPath = 'storage/' . $carpeta;
             \File::makeDirectory($publicPath, 0777, true, true);
         }
-        
+
         $files = $request->file('archivo');
 
         if ($request->hasFile('archivo')) {
-            
+
             $nombre = uniqid() . '.' . $files->getClientOriginalName();
             $path = $carpeta . '/' . $nombre;
             \Storage::disk('public')->put($path, \File::get($files));
@@ -87,7 +88,7 @@ class TarifaController extends Controller
             $tarifa = Tarifa::find($id);
             $tarifa->update([
                 'nombre_tarifa' => $request->nombre_tarifa,
-                'users_id' => $request->users_id,
+                'user_id' => $request->user_id,
                 'archivo' => $nombre
             ]);
             return response()->json([$tarifa], 200);

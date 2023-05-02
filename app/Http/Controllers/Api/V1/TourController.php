@@ -19,29 +19,34 @@ class TourController extends Controller
 
     public function store(Request $request)
     {
+        $titulo = $request->titulo;
         $carpeta = "tours";
         $ruta = public_path($carpeta);
-
         if (!\File::isDirectory($ruta)) {
-            $publicPath = 'storage/' . $carpeta;
+            $publicPath = 'storage/' . $carpeta . '/' . $titulo;
             \File::makeDirectory($publicPath, 0777, true, true);
         }
+        $filesSpanish = $request->file('archivo_english');
+        $filesEnglish = $request->file('archivo_spanish');
         $files = $request->file('img');
-        $filesPDF = $request->file('archivo');
-        if ($request->hasFile('img') || $request->hasFile('archivo')) {
 
-            // foreach ($files as $file) {
+        if ($request->hasFile('archivo_english') || $request->hasFile('archivo_spanish') || $request->hasFile('img')) {
+
+            $nombreSpanish = uniqid() . '.' . $filesSpanish->getClientOriginalName();
+            $pathSpanish = $carpeta . '/' . $titulo . '/' . $nombreSpanish;
+            \Storage::disk('public')->put($pathSpanish, \File::get($filesSpanish));
+
+            $nombreEnglish = uniqid() . '.' . $filesEnglish->getClientOriginalName();
+            $pathEnglish = $carpeta . '/' . $titulo . '/' . $nombreEnglish;
+            \Storage::disk('public')->put($pathEnglish, \File::get($filesEnglish));
+
             $nombre = uniqid() . '.' . $files->getClientOriginalName();
-            $path = $carpeta . '/' . $nombre;
+            $path = $carpeta . '/' . $titulo . '/' . $nombre;
             \Storage::disk('public')->put($path, \File::get($files));
 
-            $nombrePDF = uniqid() . '.' . $filesPDF->getClientOriginalName();
-            $pathPDF = $carpeta . '/' . $nombrePDF;
-            \Storage::disk('public')->put($pathPDF, \File::get($filesPDF));
-            // }
             $tour = new Tour([
-                'lugare_id' => $request->lugare_id,
-                'titulo' => $request->titulo,
+                'titulo' => $titulo,
+                'lugares' => $request->lugares,
                 'descripcion_spanish' => $request->descripcion_spanish,
                 'descripcion_english' => $request->descripcion_english,
                 'incluye_spanish' => $request->incluye_spanish,
@@ -50,14 +55,13 @@ class TourController extends Controller
                 'no_incluye_english' => $request->no_incluye_english,
                 'duracion' => $request->duracion,
                 'img' => $nombre,
-                'archivo' => $nombrePDF
-
+                'archivo_english' => $nombreEnglish,
+                'archivo_spanish' => $nombreSpanish,
             ]);
             $tour->save();
-            return "archivo guardado";
-
+            return response()->json($tour);
         } else {
-            return "erro";
+            return "error";
         }
 
     }

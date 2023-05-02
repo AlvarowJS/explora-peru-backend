@@ -4,16 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Lugare;
+use App\Models\Dia;
 
-class Tour extends Model
+class Circuito extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'titulo',
-        'lugares',
-        'descripcion_spanish',
-        'descripcion_english',
         'incluye_spanish',
         'incluye_english',
         'no_incluye_spanish',
@@ -24,8 +22,8 @@ class Tour extends Model
         'archivo_spanish'
     ];
 
-    public function lugare()
+    public function dias()
     {
-        return $this->belongsTo(Lugare::class);
+        return $this->hasMany(Dia::class);
     }
 }

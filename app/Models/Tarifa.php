@@ -12,7 +12,7 @@ class Tarifa extends Model
     protected $fillable = [
         'nombre_tarifa',
         'archivo',
-        'users_id'
+        'user_id'
     ];
     public function user()
     {

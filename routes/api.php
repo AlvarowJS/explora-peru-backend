@@ -9,6 +9,9 @@ use App\Http\Controllers\Api\V1\LibroController as Libro;
 use App\Http\Controllers\Api\V1\ContactenoController as Contacteno;
 use App\Http\Controllers\Api\AuthController as Auth;
 use App\Http\Controllers\Api\V1\TarifaController as Tarifa;
+use App\Http\Controllers\Api\V1\CircuitoController as Circuito;
+use App\Http\Controllers\Api\V1\PromoController as Promo;
+use App\Http\Controllers\Api\V1\DiaController as Dia;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -34,6 +37,13 @@ Route::delete('/delete-users/{id}', [Auth::class, 'deleteUsuario']);
 // Tarifas
 Route::apiResource('/v1/tarifa', Tarifa::class);
 Route::get('/v1/tarifa-user/{id}', [Tarifa::class, 'listarTarifa']);
+
+// Circuitos
+Route::apiResource('/v1/circuitos', Circuito::class);
+Route::apiResource('/v1/dias', Dia::class);
+
+//Promos
+Route::apiResource('/v1/promos', Promo::class);
 
 // Route::get('/v1/tarifa', [Tarifa::class, 'index']);
 // Route::get('/v1/tarifa/{id}', [Tarifa::class, 'show']);
