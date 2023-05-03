@@ -38,24 +38,43 @@ class DiaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Dia $dia)
+    public function show($id)
     {
-        //
+        $promo = Dia::find($id);
+        return response()->json($promo);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Dia $dia)
+    public function update(Request $request, $id)
     {
-        //
+        $dia = Dia::find($id);
+
+        if (!$dia) {
+            return response()->json(['error' => 'Registro no encontrado'], 404);
+        }
+
+        $dia->circuito_id = $request->circuito_id;
+        $dia->nombre = $request->nombre;
+        $dia->horario = $request->horario;
+        $dia->descripcion = $request->descripcion;
+        $dia->nombre_english = $request->nombre_english;
+        $dia->horario_english = $request->horario_english;
+        $dia->descripcion_english = $request->descripcion_english;
+
+        $dia->save();
+
+        return response()->json($dia);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Dia $dia)
+    public function destroy($id)
     {
-        //
+        $dia = Dia::find($id);
+        $dia->delete();
+        return response()->json('Dia eliminada correctamente.');
     }
 }
