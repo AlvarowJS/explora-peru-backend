@@ -96,6 +96,9 @@ class CircuitoController extends Controller
     public function destroy($id)
     {
         $circuito = Circuito::find($id);
+        $carpeta = "circuitos";
+        $titulo = $circuito-> titulo;
+        \Storage::disk('public')->deleteDirectory($carpeta . '/' . $titulo);
         $circuito->delete();
         return response()->json(['message' => 'Circuito eliminado con éxito.']);
     }

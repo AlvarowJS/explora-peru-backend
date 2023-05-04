@@ -52,6 +52,7 @@ Route::apiResource('/v1/promos', Promo::class);
 
 Route::apiResource('/v1/lugares', Lugare::class);
 Route::apiResource('/v1/noticias', Noticia::class);
+Route::patch('/v1/noticias-img/{id}', [Noticia::class, 'updateImg']);
 Route::apiResource('/v1/tours', Tour::class);
 Route::apiResource('/v1/libros', Libro::class);
 Route::apiResource('/v1/contactenos', Contacteno::class);

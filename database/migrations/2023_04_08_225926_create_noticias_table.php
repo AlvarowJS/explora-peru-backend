@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('noticias', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo');
-            $table->text('nota');
-            $table->string('img');
+            $table->string('titulo')->nullable();
+            $table->text('nota')->nullable();
+            $table->string('img')->nullable();
             $table->timestamps();
         });
     }
