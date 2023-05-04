@@ -85,7 +85,6 @@ class PromoController extends Controller
     public function update(Request $request, $id)
     {
         $promo = Promo::findOrFail($id);
-
         // Obtener el archivo anterior
         $imgAnterior = $promo->img;
         $archivoEnglishAnterior = $promo->archivo_english;

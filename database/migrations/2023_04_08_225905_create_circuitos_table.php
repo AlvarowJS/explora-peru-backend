@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('circuitos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dia_id')->nullable()->constrained('dias');
+            // $table->foreignId('dia_id')->nullable()->constrained('dias');
             $table->string('titulo');
             $table->text('incluye_spanish');
             $table->text('incluye_english');
