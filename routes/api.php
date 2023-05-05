@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\TarifaController as Tarifa;
 use App\Http\Controllers\Api\V1\CircuitoController as Circuito;
 use App\Http\Controllers\Api\V1\PromoController as Promo;
 use App\Http\Controllers\Api\V1\DiaController as Dia;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,11 +52,12 @@ Route::apiResource('/v1/promos', Promo::class);
 // Route::post('/v1/tarifa', [Tarifa::class, 'store']);
 
 Route::apiResource('/v1/lugares', Lugare::class);
+
 Route::apiResource('/v1/noticias', Noticia::class);
+
 Route::patch('/v1/noticias-img/{id}', [Noticia::class, 'updateImg']);
 Route::apiResource('/v1/tours', Tour::class);
 Route::apiResource('/v1/libros', Libro::class);
 Route::apiResource('/v1/contactenos', Contacteno::class);
 
 Route::put('/v1/tour-update/{id}', [Tour::class, 'updateTour']);
-
