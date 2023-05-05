@@ -53,8 +53,11 @@ Route::apiResource('/v1/promos', Promo::class);
 
 Route::apiResource('/v1/lugares', Lugare::class);
 
+Route::middleware('cors')->group(function () {
+    Route::apiResource('/v1/noticias', Noticia::class);
+});
 // Route::apiResource('/v1/noticias', Noticia::class);
-Route::middleware('cors')->apiResource('/v1/noticias', Noticia::class);
+// Route::middleware('cors')->apiResource('/v1/noticias', Noticia::class);
 
 
 Route::patch('/v1/noticias-img/{id}', [Noticia::class, 'updateImg']);
