@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('titulo')->nullable();
             $table->text('nota')->nullable();
+            $table->string('titulo_ingles')->nullable();
+            $table->text('nota_ingles')->nullable();
             $table->string('img')->nullable();
             $table->timestamps();
         });

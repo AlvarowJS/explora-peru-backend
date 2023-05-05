@@ -42,6 +42,8 @@ class NoticiaController extends Controller
             $noticia = new Noticia([
                 'titulo' => $request->titulo,
                 'nota' => $request->nota,
+                'titulo_ingles' => $request->titulo_ingles,
+                'nota_ingles' => $request->nota_ingles,
                 'img' => $nombre,
 
             ]);
@@ -91,6 +93,8 @@ class NoticiaController extends Controller
         }
         $noticia->titulo = $request->input('titulo');
         $noticia->nota = $request->input('nota');
+        $noticia->titulo_ingles = $request->input('titulo_ingles');
+        $noticia->nota_ingles = $request->input('nota_ingles');
 
         // if ($request->hasFile('img')) {
         //     $file = $request->file('img');
