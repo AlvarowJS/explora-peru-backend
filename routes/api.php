@@ -37,31 +37,30 @@ Route::delete('/delete-users/{id}', [Auth::class, 'deleteUsuario']);
 
 // Tarifas
 Route::apiResource('/v1/tarifa', Tarifa::class);
+Route::post('/v1/tarifa-file', [Tarifa::class, 'updateWithFile']);
 Route::get('/v1/tarifa-user/{id}', [Tarifa::class, 'listarTarifa']);
 
 // Circuitos
 Route::apiResource('/v1/circuitos', Circuito::class);
+Route::post('/v1/circuitos-img', [Circuito::class, 'updateWithImage']);
+
 Route::apiResource('/v1/dias', Dia::class);
 
 //Promos
 Route::apiResource('/v1/promos', Promo::class);
-
+Route::post('/v1/promos-img', [Promo::class, 'updateWithImage']);
 // Route::get('/v1/tarifa', [Tarifa::class, 'index']);
 // Route::get('/v1/tarifa/{id}', [Tarifa::class, 'show']);
 // Route::put('/v1/tarifa/{id}', [Tarifa::class, 'update']);
 // Route::post('/v1/tarifa', [Tarifa::class, 'store']);
 
 Route::apiResource('/v1/lugares', Lugare::class);
-
-Route::middleware('cors')->group(function () {
-    Route::apiResource('/v1/noticias', Noticia::class);
-});
-// Route::apiResource('/v1/noticias', Noticia::class);
-// Route::middleware('cors')->apiResource('/v1/noticias', Noticia::class);
-
-
-Route::patch('/v1/noticias-img/{id}', [Noticia::class, 'updateImg']);
+Route::apiResource('/v1/noticias', Noticia::class);
+Route::post('/v1/noticias-img', [Noticia::class, 'updateImg']);
+// Route::patch('/v1/noticias-img/{id}', [Noticia::class, 'updateImg']);
 Route::apiResource('/v1/tours', Tour::class);
+Route::post('/v1/tours-img', [Tour::class, 'updateWithImage']);
+
 Route::apiResource('/v1/libros', Libro::class);
 Route::apiResource('/v1/contactenos', Contacteno::class);
 

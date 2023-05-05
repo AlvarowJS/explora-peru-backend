@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Promo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PromoController extends Controller
 {
@@ -78,80 +79,90 @@ class PromoController extends Controller
         $promo = Promo::find($id);
         return response()->json($promo);
     }
+    public function updateWithImage(Request $request)
+    {
+        $carpeta = "promos";
+        $ruta = public_path($carpeta);
 
+        $id = $request->id;
+        $titulo = $request->titulo;
+        $lugares = $request->lugares;
+        $descripcion_spanish = $request->descripcion_spanish;
+        $descripcion_english = $request->descripcion_english;
+        $incluye_spanish = $request->incluye_spanish;
+        $incluye_english = $request->incluye_english;
+        $no_incluye_spanish = $request->no_incluye_spanish;
+        $no_incluye_english = $request->no_incluye_english;
+        $duracion = $request->duracion;
+
+        $promos = DB::table('promos')
+            ->where('promos.id', '=', $id)
+            ->get();
+        $tituloActual = $promos[0]->titulo;
+        $imgActual = $promos[0]->img;
+        $archivo_englishActual = $promos[0]->archivo_english;
+        $archivo_spanishActual = $promos[0]->archivo_spanish;
+        $files = $request->file('img');
+        $filesSpanish = $request->file('archivo_english');
+        $filesEnglish = $request->file('archivo_spanish');
+        // Cambiara el nombre de la carpetea
+        if ($tituloActual != $titulo) {
+            \Storage::disk('public')->move($carpeta . '/' . $tituloActual, $carpeta . '/' . $titulo);
+        }
+
+        if ($request->hasFile('img')) {
+            \Storage::disk('public')->delete($carpeta . '/' . $titulo . '/' . $imgActual);
+            $nombre = uniqid() . '.' . $files->getClientOriginalName();
+            $path = $carpeta . '/' . $titulo . '/' . $nombre;
+            \Storage::disk('public')->put($path, \File::get($files));
+            $updateImg = Promo::find($id);
+            $updateImg->update([
+                'img' => $nombre,
+            ]);
+        }
+        if ($request->hasFile('archivo_english')) {
+            \Storage::disk('public')->delete($carpeta . '/' . $titulo . '/' . $archivo_englishActual);
+            $nombreEnglish = uniqid() . '.' . $filesEnglish->getClientOriginalName();
+            $pathEnglish = $carpeta . '/' . $titulo . '/' . $nombreEnglish;
+            \Storage::disk('public')->put($pathEnglish, \File::get($filesEnglish));
+            $updateArchivoEnglish = Promo::find($id);
+            $updateArchivoEnglish->update([
+                'archivo_english' => $nombreEnglish,
+            ]);
+        }
+        if ($request->hasFile('archivo_spanish')) {
+            \Storage::disk('public')->delete($carpeta . '/' . $titulo . '/' . $archivo_spanishActual);
+            $nombreSpanish = uniqid() . '.' . $filesSpanish->getClientOriginalName();
+            $pathSpanish = $carpeta . '/' . $titulo . '/' . $nombreSpanish;
+            \Storage::disk('public')->put($pathSpanish, \File::get($filesSpanish));
+            $updateArchivoSpanish = Promo::find($id);
+            $updateArchivoSpanish->update([
+                'archivo_spanish' => $nombreSpanish,
+            ]);
+        }
+
+        $updateData = Promo::find($id);
+        $updateData->update([
+            'titulo' => $titulo,
+            'lugares' => $lugares,
+            'descripcion_spanish' => $descripcion_spanish,
+            'descripcion_english' => $descripcion_english,
+            'incluye_spanish' => $incluye_spanish,
+            'incluye_english' => $incluye_english,
+            'no_incluye_spanish' => $no_incluye_spanish,
+            'no_incluye_english' => $no_incluye_english,
+            'duracion' => $duracion,
+        ]);
+
+        return response()->json([$updateData], 201);
+
+    }
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $promo = Promo::findOrFail($id);
-        // Obtener el archivo anterior
-        $imgAnterior = $promo->img;
-        $archivoEnglishAnterior = $promo->archivo_english;
-        $archivoSpanishAnterior = $promo->archivo_spanish;
 
-        $titulo = $request->titulo;
-        $carpeta = "promos";
-        $ruta = public_path($carpeta);
-        if (!\File::isDirectory($ruta)) {
-            $publicPath = 'storage/' . $carpeta . '/' . $titulo;
-            \File::makeDirectory($publicPath, 0777, true, true);
-        }
-
-        // Subir el nuevo archivo, si se proporcionó uno
-        if ($request->hasFile('archivo_english')) {
-            $nombreEnglish = uniqid() . '.' . $request->archivo_english->getClientOriginalName();
-            $pathEnglish = $carpeta . '/' . $titulo . '/' . $nombreEnglish;
-            \Storage::disk('public')->put($pathEnglish, \File::get($request->archivo_english));
-
-            // Eliminar el archivo anterior
-            \Storage::disk('public')->delete($carpeta . '/' . $titulo . '/' . $archivoEnglishAnterior);
-
-            // Actualizar los datos de la instancia de Promo con el nuevo nombre del archivo
-            $promo->archivo_english = $nombreEnglish;
-        }
-
-        // Subir el nuevo archivo, si se proporcionó uno
-        if ($request->hasFile('archivo_spanish')) {
-            $nombreSpanish = uniqid() . '.' . $request->archivo_spanish->getClientOriginalName();
-            $pathSpanish = $carpeta . '/' . $titulo . '/' . $nombreSpanish;
-            \Storage::disk('public')->put($pathSpanish, \File::get($request->archivo_spanish));
-
-            // Eliminar el archivo anterior
-            \Storage::disk('public')->delete($carpeta . '/' . $titulo . '/' . $archivoSpanishAnterior);
-
-            // Actualizar los datos de la instancia de Promo con el nuevo nombre del archivo
-            $promo->archivo_spanish = $nombreSpanish;
-        }
-        // Subir el nuevo img, si se proporcionó uno
-
-        if ($request->hasFile('img')) {
-            $nombre = uniqid() . '.' . $request->archivo_spanish->getClientOriginalName();
-            $path = $carpeta . '/' . $titulo . '/' . $nombre;
-            \Storage::disk('public')->put($path, \File::get($request->img));
-
-            // Eliminar el archivo anterior
-            \Storage::disk('public')->delete($carpeta . '/' . $titulo . '/' . $imgAnterior);
-
-            // Actualizar los datos de la instancia de Promo con el nuevo nombre del archivo
-            $promo->img = $nombre;
-        }
-
-        // Actualizar los demás datos de la instancia de Promo
-        $promo->titulo = $titulo;
-        $promo->lugares = $request->lugares;
-        $promo->descripcion_spanish = $request->descripcion_spanish;
-        $promo->descripcion_english = $request->descripcion_english;
-        $promo->incluye_spanish = $request->incluye_spanish;
-        $promo->incluye_english = $request->incluye_english;
-        $promo->no_incluye_spanish = $request->no_incluye_spanish;
-        $promo->no_incluye_english = $request->no_incluye_english;
-        $promo->duracion = $request->duracion;
-
-        // Guardar los cambios en la base de datos
-        $promo->save();
-
-        return response()->json($promo);
     }
 
     /**
@@ -160,6 +171,9 @@ class PromoController extends Controller
     public function destroy($id)
     {
         $promo = Promo::find($id);
+        $carpeta = "promos";
+        $titulo = $promo->titulo;
+        \Storage::disk('public')->deleteDirectory($carpeta . '/' . $titulo);
         $promo->delete();
         return response()->json('Promocion eliminada correctamente.');
     }
