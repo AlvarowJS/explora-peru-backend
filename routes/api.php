@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\LugareController as Lugare;
 use App\Http\Controllers\Api\V1\NoticiaController as Noticia;
+use App\Http\Controllers\Api\V2\NoticiaController as Noticia2;
 use App\Http\Controllers\Api\V1\TourController as Tour;
 use App\Http\Controllers\Api\V1\LibroController as Libro;
 use App\Http\Controllers\Api\V1\ContactenoController as Contacteno;
@@ -55,9 +56,19 @@ Route::post('/v1/promos-img', [Promo::class, 'updateWithImage']);
 // Route::post('/v1/tarifa', [Tarifa::class, 'store']);
 
 Route::apiResource('/v1/lugares', Lugare::class);
+
+
+Route::apiResource('/v2/noticias', Noticia2::class);
+Route::post('/v2/noticias-img', [Noticia2::class, 'updateImg']);
+Route::delete('/v2/noticias-eliminar/{id}', [Noticia2::class, 'eliminar']);
+
+
 Route::apiResource('/v1/noticias', Noticia::class);
 Route::post('/v1/noticias-img', [Noticia::class, 'updateImg']);
-Route::get('/v1/noticias-eliminar/{id}', [Noticia::class, 'eliminar']);
+Route::delete('/v1/noticias-eliminar/{id}', [Noticia::class, 'eliminar']);
+
+
+
 // Route::patch('/v1/noticias-img/{id}', [Noticia::class, 'updateImg']);
 Route::apiResource('/v1/tours', Tour::class);
 Route::post('/v1/tours-img', [Tour::class, 'updateWithImage']);

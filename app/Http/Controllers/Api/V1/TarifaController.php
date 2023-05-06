@@ -145,7 +145,14 @@ class TarifaController extends Controller
      */
     public function destroy($id)
     {
-        Tarifa::destroy($id);
-        return response()->json(null, 204);
+        $tour = Tarifa::find($id);
+        $carpeta = "tarifario";
+        $nombre_tarifa = $tour->nombre_tarifa;
+        \Storage::disk('public')->deleteDirectory($carpeta . '/' . $nombre_tarifa);
+        $tour->delete();
+        return response()->json(['message' => 'Tarifa eliminado con éxito.']);
+        //
+
     }
 }
+
