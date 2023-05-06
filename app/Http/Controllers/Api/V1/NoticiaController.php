@@ -121,7 +121,8 @@ class NoticiaController extends Controller
         }
         $files = $request->file('img');
         if ($request->hasFile('img')) {
-            \Storage::disk('public')->delete($carpeta . '/' . $titulo . '/' . $imgActual);            $nombre = uniqid() . '.' . $files->getClientOriginalName();
+            \Storage::disk('public')->delete($carpeta . '/' . $titulo . '/' . $imgActual);
+            $nombre = uniqid() . '.' . $files->getClientOriginalName();
             $nombre = uniqid() . '.' . $files->getClientOriginalName();
             $path = $carpeta . '/' . $titulo . '/' . $nombre;
             \Storage::disk('public')->put($path, \File::get($files));
@@ -151,5 +152,18 @@ class NoticiaController extends Controller
         \Storage::disk('public')->deleteDirectory($carpeta . '/' . $titulo);
         $noticia->delete();
         return response()->json('Noticia eliminada correctamente.');
+    }
+
+    public function eliminar($id)
+    {
+        $noticiaGet = Noticia::find($id);
+        $carpeta = "noticias";
+        $titulo = $noticiaGet->titulo;
+        \DB::table('noticias')
+            ->where('id', $id)
+            ->delete();
+        \Storage::disk('public')->deleteDirectory($carpeta . '/' . $titulo);
+        return response()->json('Noticia eliminada correctamente.');
+
     }
 }

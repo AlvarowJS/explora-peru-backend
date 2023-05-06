@@ -57,6 +57,7 @@ Route::post('/v1/promos-img', [Promo::class, 'updateWithImage']);
 Route::apiResource('/v1/lugares', Lugare::class);
 Route::apiResource('/v1/noticias', Noticia::class);
 Route::post('/v1/noticias-img', [Noticia::class, 'updateImg']);
+Route::get('/v1/noticias-eliminar/{id}', [Noticia::class, 'eliminar']);
 // Route::patch('/v1/noticias-img/{id}', [Noticia::class, 'updateImg']);
 Route::apiResource('/v1/tours', Tour::class);
 Route::post('/v1/tours-img', [Tour::class, 'updateWithImage']);
