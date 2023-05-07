@@ -60,7 +60,7 @@ Route::apiResource('/v1/lugares', Lugare::class);
 
 Route::apiResource('/v2/noticias', Noticia2::class);
 Route::post('/v2/noticias-img', [Noticia2::class, 'updateImg']);
-Route::delete('/v2/noticias-eliminar/{id}', [Noticia2::class, 'eliminar']);
+Route::get('/v2/noticias-eliminar/{id}', [Noticia2::class, 'eliminar']);
 
 
 Route::apiResource('/v1/noticias', Noticia::class);

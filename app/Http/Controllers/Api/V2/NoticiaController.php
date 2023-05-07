@@ -160,14 +160,12 @@ class NoticiaController extends Controller
 
     public function eliminar($id)
     {
-        $noticiaGet = Noticia::find($id);
-        // return $noticiaGet;
+        $noticia = Noticia::find($id);
         $carpeta = "noticias";
-        $titulo = $noticiaGet->titulo;
-        \DB::table('noticias')
-            ->where('id', $id)
-            ->delete();
+        $titulo = $noticia->titulo;
         \Storage::disk('public')->deleteDirectory($carpeta . '/' . $titulo);
+        \DB::select('CALL SP_ELIMINAR_NOTICIA(?)', array($id));
+        // $noticia->delete();
         return response()->json('Noticia eliminada correctamente.');
 
     }
