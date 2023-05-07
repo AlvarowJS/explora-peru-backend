@@ -48,6 +48,7 @@ Route::post('/v1/circuitos-img', [Circuito::class, 'updateWithImage']);
 Route::apiResource('/v1/dias', Dia::class);
 
 //Promos
+
 Route::apiResource('/v1/promos', Promo::class);
 Route::post('/v1/promos-img', [Promo::class, 'updateWithImage']);
 // Route::get('/v1/tarifa', [Tarifa::class, 'index']);
@@ -63,9 +64,12 @@ Route::post('/v2/noticias-img', [Noticia2::class, 'updateImg']);
 Route::get('/v2/noticias-eliminar/{id}', [Noticia2::class, 'eliminar']);
 
 
-Route::apiResource('/v1/noticias', Noticia::class);
-Route::post('/v1/noticias-img', [Noticia::class, 'updateImg']);
-Route::delete('/v1/noticias-eliminar/{id}', [Noticia::class, 'eliminar']);
+Route::group(['middleware' => ['cors']], function () {
+    Route::apiResource('/v1/noticias', Noticia::class);
+    Route::post('/v1/noticias-img', [Noticia::class, 'updateImg']);
+    Route::delete('/v1/noticias-eliminar/{id}', [Noticia::class, 'eliminar']);
+});
+
 
 
 
